@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -23,4 +23,83 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  --color-primary-logo: #142857;
+
+  --color-primary-900: #142857;
+  --color-primary-800: #193f8f;
+  --color-primary-700: #204eb1;
+  --color-primary-600: #1b6ef5;
+  --color-primary-500: #2989ff;
+  --color-primary-400: #59afff;
+  --color-primary-300: #8ecdff;
+  --color-primary-200: #bce0ff;
+  --color-primary-100: #ebefff;
+
+  --color-neutral-900: #212529;
+  --color-neutral-800: #343a40;
+  --color-neutral-700: #495057;
+  --color-neutral-600: #6c757d;
+  --color-neutral-500: #adb5bd;
+  --color-neutral-400: #ced4da;
+  --color-neutral-300: #dee2e6;
+  --color-neutral-200: #e9ecef;
+  --color-neutral-100: #f8f9fa;
+
+  --color-black: #000000;
+  --color-white: #ffffff;
+
+  --color-albert-success: #82dd55;
+  --color-albert-error: #e23636;
+  --color-albert-warning: #edb95e;
+  --color-albert-noti: #4a90e2;
+
+  --color-secondary-900: #142857;
+  --color-secondary-800: #193f8f;
+  --color-secondary-700: #1458e1;
+  --color-secondary-600: #1b6ef5;
+  --color-secondary-500: #328eff;
+  --color-secondary-400: #59b0ff;
+  --color-secondary-300: #8ecdff;
+  --color-secondary-200: #bce0ff;
+  --color-secondary-100: #d9edff;
+  --color-secondary-50: #eef7ff;
+
+  --color-primary-border-50: #a1a1aa;
+  --color-custom-blue: #0ca9eb;
+}
+
+/* styles/loading.module.css */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #142857; /* Màu nền */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+.logo {
+  width: 128px;
+  height: 128px;
+}
+
+@keyframes heartbeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
 }

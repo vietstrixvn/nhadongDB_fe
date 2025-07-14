@@ -1,105 +1,40 @@
-import axios, { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { baseURL } from './api';
-import { logDebug } from '@/utils/logger';
 
-/**
- * ==========================
- * 📌 @API Auth API
- * ==========================
- *
- * @desc Auth API Request
- */
-const authApi = () => {
+// Function to create an Axios instance with optional token
+const authApi = (token: string | null = null) => {
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
   return axios.create({
-    baseURL: baseURL,
-    headers: {},
-    withCredentials: true,
-    timeout: 15000, // 15 seconds timeout
+    baseURL,
+    headers, // Headers được thêm tùy theo điều kiện
   });
 };
 
-/**
- * ==========================
- * 📌 @API Auth API
- * ==========================
- *
- * @desc Auth API Request
- */
-export const handleAPI = async <T = any>(
+// Function to handle API requests with support for different HTTP methods
+const handleAPI = async (
   url: string,
   method: 'POST' | 'PATCH' | 'GET' | 'DELETE' = 'GET',
-  data?: any
-): Promise<T> => {
-  logDebug('⬆️ API REQUEST:', {
-    url: `${baseURL}${url}`,
-    method,
-    data: method !== 'GET' ? data : undefined,
-    params: method === 'GET' ? data : undefined,
-    timestamp: new Date().toISOString(),
-  });
-
+  data?: any,
+  token: string | null = null
+) => {
   try {
-    const apiInstance = authApi();
+    const apiInstance = authApi(token);
     const config: AxiosRequestConfig = {
       url,
       method,
+      data,
     };
-
-    // Handle data appropriately based on request method
-    if (method !== 'GET' && data) {
-      config.data = data;
-    } else if (method === 'GET' && data) {
-      config.params = data;
-    }
-
-    const startTime = Date.now();
-    const response: AxiosResponse = await apiInstance(config);
-    const endTime = Date.now();
-
-    // Log successful response
-    logDebug('✅ API RESPONSE SUCCESS:', {
-      url: `${baseURL}${url}`,
-      method,
-      status: response.status,
-      statusText: response.statusText,
-      responseTime: `${endTime - startTime}ms`,
-      timestamp: new Date().toISOString(),
-    });
-
+    const response = await apiInstance(config);
     return response.data;
   } catch (error) {
-    const axiosError = error as AxiosError;
-
-    // Log detailed error information
-    if (axiosError.response) {
-      // The request was made and the server responded with an error status code
-      console.error('❌ API ERROR:', {
-        url: `${baseURL}${url}`,
-        method,
-        status: axiosError.response.status,
-        statusText: axiosError.response.statusText,
-        data: axiosError.response.data,
-        timestamp: new Date().toISOString(),
-      });
-    } else if (axiosError.request) {
-      // The request was made but no response was received
-      console.error('❌ API ERROR (NO RESPONSE):', {
-        url: `${baseURL}${url}`,
-        method,
-        message: axiosError.message,
-        timestamp: new Date().toISOString(),
-      });
-    } else {
-      // Something happened in setting up the request
-      console.error('❌ API ERROR (SETUP):', {
-        url: `${baseURL}${url}`,
-        method,
-        message: axiosError.message,
-        timestamp: new Date().toISOString(),
-      });
-    }
-
-    // Re-throw the error for handling by the caller
+    // Handle error here (logging or custom error message)
     throw error;
   }
 };
+
+export default handleAPI;
+export { handleAPI };
